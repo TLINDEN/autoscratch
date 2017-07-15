@@ -49,7 +49,7 @@
 ;; list consists  of cons cells, where  the `car' is a  regexp and the
 ;; `cdr' an emacs lisp form (e.g. a  lambda or defun).  If you want to
 ;; use regexps which  match more than one character, then  you need to
-;; set `autoscratch-trigger-on-first-char'  to true and  possibly tune
+;; set `autoscratch-trigger-on-first-char' to  `nil' and possibly tune
 ;; `autoscratch-trigger-after' accordingly.
 
 ;; If   no  regexp   matches  and/or   `autoscratch-trigger-after'  is
