@@ -62,6 +62,10 @@
 ;; `autoscratch-buffer'  in the  background. In  order to  enable this
 ;; feature, set `autoscratch-fork-after-trigger' to t.
 
+;; To   further    tune   the   trigger   bahavior    you   can   tune
+;; `autoscratch-pre-trigger-hook'   which   will  be   called   before
+;; executing    the    form    of    the    matching    trigger    and
+;; `autoscratch-post-trigger-hook' afterwards.
 
 ;;; Code:
 ;;;; Customizables
@@ -101,6 +105,16 @@ This list triggers after the first character entered."
 (defcustom autoscratch-trigger-after 5
   "Max chars to be entered to force trigger the default form.")
 
+;;;; Public Vars
+
+(defvar autoscratch-pre-trigger-hook ()
+  "Hooks called before executing a matching trigger form")
+
+(defvar autoscratch-post-trigger-hook ()
+  "Hooks called after executing a matching trigger form")
+
+;; FIXME: add hooks for fork stuff
+
 ;;;; Public Functions
 
 (defun autoscratch-buffer-rename ()
@@ -132,7 +146,9 @@ and create a new autoscratch buffer."
 ;;;; Internal Functions
 
 (defun autoscratch--eval-trigger-and-rename (form)
+  (run-hooks 'autoscratch-pre-trigger-hook)
   (eval form)
+  (run-hooks 'autoscratch-post-trigger-hook)
   (message (format "autoscratch switched to %s" major-mode))
   (autoscratch-fork-and-rename-current))
 
