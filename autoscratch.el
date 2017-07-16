@@ -63,9 +63,8 @@
 ;; feature, set `autoscratch-fork-after-trigger' to t.
 
 ;; To   further    tune   the   trigger   bahavior    you   can   tune
-;; `autoscratch-pre-trigger-hook'   which   will  be   called   before
-;; executing    the    form    of    the    matching    trigger    and
-;; `autoscratch-post-trigger-hook' afterwards.
+;; `autoscratch-trigger-hook' which will be called after executing the
+;; form of the matching trigger.
 
 ;;; Code:
 ;;;; Customizables
@@ -76,8 +75,7 @@
   :group 'emacs)
 
 (defcustom autoscratch-triggers-alist
-  '(("("            . (emacs-lisp-mode))
-    (";"            . (emacs-lisp-mode))
+  '(("[(;]"         . (emacs-lisp-mode))
     ("#"            . (conf-unix-mode))
     ("[-a-zA-Z0-9]" . (text-mode))
     ("/"            . (c-mode))
@@ -107,57 +105,65 @@ This list triggers after the first character entered."
 
 ;;;; Public Vars
 
-(defvar autoscratch-pre-trigger-hook ()
-  "Hooks called before executing a matching trigger form")
-
-(defvar autoscratch-post-trigger-hook ()
+(defvar autoscratch-trigger-hook ()
   "Hooks called after executing a matching trigger form")
 
-;; FIXME: add hooks for fork stuff
+(defvar autoscratch-rename-hook ()
+  "Hooks called after renaming the current buffer.")
 
 ;;;; Public Functions
 
 (defun autoscratch-buffer-rename ()
   "Rename current autoscratch buffer.
 
-New name is '*autoscratch-<new-major-mode><N>*"
+New name is '*autoscratch-<new-major-mode><N>*
+
+Executes `autoscratch-rename-hook' afterwards."
   (interactive)
   (rename-buffer
    (generate-new-buffer-name
     (format "*%s-scratch*"
-            (replace-regexp-in-string "-mode" "" (format "%s" major-mode))))))
+            (replace-regexp-in-string
+             "-mode" ""
+             (format "%s" major-mode))))
+   (run-hooks 'autoscratch-rename-hook)))
 
 (defun autoscratch-buffer ()
-  "Create a new autoscratch buffer."
+  "Create and switch to a new autoscratch buffer."
   (interactive)
-  (with-current-buffer (get-buffer-create "*autoscratch*")
+  (let ((buf (get-buffer-create "*autoscratch*")))
+    (switch-to-buffer buf)
     (autoscratch-mode)))
-
-(defun autoscratch-fork-and-rename-current ()
-  "Rename buffer and create new autoscratch.
-
-If `autoscratch-fork-after-trigger' is t, rename buffer
-and create a new autoscratch buffer."
-  (interactive)
-  (when (eq t autoscratch-fork-after-trigger)
-    (autoscratch-buffer-rename)
-    (autoscratch-buffer)))
 
 ;;;; Internal Functions
 
-(defun autoscratch--eval-trigger-and-rename (form)
-  (run-hooks 'autoscratch-pre-trigger-hook)
+(defun autoscratch--fork-and-rename-current ()
+  "Rename buffer and create new autoscratch.
+
+If `autoscratch-fork-after-trigger' is t, create a
+new autoscratch buffer and rename the current one
+to $mode-scratch."
+  (interactive)
+  (let ((cur (current-buffer)))
+    (when (eq t autoscratch-fork-after-trigger)
+      (autoscratch-buffer)
+      (switch-to-buffer cur)
+      (autoscratch-buffer-rename))))
+
+(defun autoscratch--eval-trigger (form)
+  "Evaluate FORM.
+
+Executes `autoscratch-trigger-hook' after evaluation."
   (eval form)
   (run-hooks 'autoscratch-post-trigger-hook)
-  (message (format "autoscratch switched to %s" major-mode))
-  (autoscratch-fork-and-rename-current))
+  (message (format "autoscratch switched to %s" major-mode)))
 
 (defun autoscratch--look-for-triggers (forward)
   (let ((matchform nil)
         (renamed nil)
         (newname nil)
         (C 0))
-    (if (or (catch 'done
+    (when (or (catch 'done
               (dolist (trigger autoscratch-triggers-alist)
                 (when (if forward
                           (looking-at (car trigger))
@@ -165,7 +171,8 @@ and create a new autoscratch buffer."
                   (setq matchform (cdr trigger))
                   (throw 'done t))))
             (eq t autoscratch-trigger-on-first-char))
-        (autoscratch--eval-trigger-and-rename (or matchform autoscratch-default-trigger))
+        (autoscratch--eval-trigger (or matchform autoscratch-default-trigger))
+        (autoscratch--fork-and-rename-current)
       ;; else: multichar allowed, continue until max
       (when (> (point) autoscratch-trigger-after)
         (eval autoscratch-default-trigger)))))
