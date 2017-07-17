@@ -43,7 +43,9 @@
 ;;
 ;;     (require 'autoscratch)
 ;;     (setq initial-major-mode 'autoscratch-mode)
-
+;;     (setq initial-scratch-message "")
+;;     (setq inhibit-startup-screen t)
+;;
 ;; You     may,     however,     configure    the     trigger     list
 ;; `autoscratch-triggers-alist' according  to your  preferences.  This
 ;; list consists  of cons cells, where  the `car' is a  regexp and the
