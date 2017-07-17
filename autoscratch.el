@@ -76,14 +76,26 @@
 
 (defcustom autoscratch-triggers-alist
   '(("[(;]"         . (emacs-lisp-mode))
-    ("#"            . (conf-unix-mode))
+    ("#"            . (autoscratch-select
+                       '(("perl"   . (cperl-mode))
+                         ("ruby"   . (ruby-mode))
+                         ("python" . (python-mode))
+                         ("conf"   . (conf-unix-mode))
+                         ("shell"  . (shell-script-mode)))))
     ("[-a-zA-Z0-9]" . (text-mode))
     ("/"            . (c-mode))
     ("*"            . (progn (insert " ") (org-mode)))
     ("."            . (fundamental-mode)))
   "Default trigger alist for autoscratch mode.
 
-This list triggers after the first character entered."
+This list triggers after the first character entered.
+You can customize this variable directly or use `add-to-list'
+to add more triggers.
+
+In case there are more possibilities for a character, you can
+use `autoscratch-select' to make autoscratch ask interactively
+for a major mode to switch to, which see. A good example for
+such a character is # which is the comment-char in many modes."
   :group 'autoscratch
   :type 'list)
 
@@ -134,6 +146,28 @@ Executes `autoscratch-rename-hook' afterwards."
   (let ((buf (get-buffer-create "*autoscratch*")))
     (switch-to-buffer buf)
     (autoscratch-mode)))
+
+(defun autoscratch-select(modelist)
+  "Interactively ask for major mode to switch to.
+
+Argument MODELIST must be an alist where the car of each
+pair must be a name and the cdr some arbitrary emacs lisp
+form.
+
+Example for MODELIST:
+
+'((\"perl\"   . (cperl-mode))
+  (\"ruby\"   . (ruby-mode))
+  (\"python\" . (python-mode))
+  (\"shell\"  . (shell-script-mode))
+
+This function shall only be called from `autoscratch-triggers-alist'."
+  (interactive)
+  (let ((keys ()))
+    (dolist (e modelist)
+      (push (car e) keys))
+    (eval (cdr (assoc (completing-read "switch mode to: " keys) modelist)))))
+
 
 ;;;; Internal Functions
 
