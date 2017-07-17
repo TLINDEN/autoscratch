@@ -143,7 +143,7 @@ Executes `autoscratch-rename-hook' afterwards."
 (defun autoscratch-buffer ()
   "Create and switch to a new autoscratch buffer."
   (interactive)
-  (let ((buf (get-buffer-create "*autoscratch*")))
+  (let ((buf (get-buffer-create "*scratch*")))
     (switch-to-buffer buf)
     (autoscratch-mode)))
 
