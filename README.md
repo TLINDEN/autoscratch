@@ -19,7 +19,7 @@ enter a paren, it will switch to `emacs-lisp-mode`.
 
 The minimum configuration looks like this:
 
-        (require 'autoscratch)
+        (require 'autoscratch-mode)
         (setq initial-major-mode 'autoscratch-mode)
         (setq initial-scratch-message "")
         (setq inhibit-startup-screen t)
