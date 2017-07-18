@@ -182,9 +182,9 @@ to $mode-scratch."
   (interactive)
   (let ((cur (current-buffer)))
     (when (eq t autoscratch-fork-after-trigger)
+      (autoscratch-buffer-rename)
       (autoscratch-buffer)
-      (switch-to-buffer cur)
-      (autoscratch-buffer-rename))))
+      (switch-to-buffer cur))))
 
 (defun autoscratch--eval-trigger (form)
   "Evaluate FORM.
