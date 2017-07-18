@@ -195,10 +195,7 @@ Executes `autoscratch-trigger-hook' after evaluation."
   (message (format "autoscratch switched to %s" major-mode)))
 
 (defun autoscratch--look-for-triggers (forward)
-  (let ((matchform nil)
-        (renamed nil)
-        (newname nil)
-        (C 0))
+  (let ((matchform nil))
     (when (or (catch 'done
               (dolist (trigger autoscratch-triggers-alist)
                 (when (if forward
