@@ -173,9 +173,14 @@ This function shall only be called from `autoscratch-triggers-alist'."
 
 ;;;; Internal Functions
 
+(defun autoscratch--function-p (form)
+  "Check if FORM is a function."
+  (if (symbolp form)
+      (fboundp form)
+    (functionp form)))
+
 (defun autoscratch--fork-and-rename-current ()
   "Rename buffer and create new autoscratch.
-
 If `autoscratch-fork-after-trigger' is t, create a
 new autoscratch buffer and rename the current one
 to $mode-scratch."
@@ -187,10 +192,11 @@ to $mode-scratch."
       (switch-to-buffer cur))))
 
 (defun autoscratch--eval-trigger (form)
-  "Evaluate FORM.
-
+  "If FORM is a function execute interactively, otherwise evaluate it.
 Executes `autoscratch-trigger-hook' after evaluation."
-  (eval form)
+  (if (autoscratch--function-p form)
+      (funcall-interactively form)
+    (eval form))
   (run-hooks 'autoscratch-post-trigger-hook)
   (message (format "autoscratch switched to %s" major-mode)))
 
@@ -208,7 +214,7 @@ Executes `autoscratch-trigger-hook' after evaluation."
         (autoscratch--fork-and-rename-current)
       ;; else: multichar allowed, continue until max
       (when (> (point) autoscratch-trigger-after)
-        (eval autoscratch-default-trigger)))))
+        (autoscratch--eval-trigger autoscratch-default-trigger)))))
 
 (defun autoscratch--self-insert-command (N)
   "Look for autoscratch trigger, execute if found and call `self-insert-command'."
