@@ -195,7 +195,7 @@ to $mode-scratch."
   "If FORM is a function execute interactively, otherwise evaluate it.
 Executes `autoscratch-trigger-hook' after evaluation."
   (if (autoscratch--function-p form)
-      (funcall-interactively form)
+      (call-interactively form)
     (eval form))
   (run-hooks 'autoscratch-post-trigger-hook)
   (message (format "autoscratch switched to %s" major-mode)))
