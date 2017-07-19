@@ -13,5 +13,7 @@ if [ -n "$TRAVIS" ]; then
 fi
 
 cask emacs --batch -Q -l package-lint.el -f package-lint-batch-and-exit autoscratch-mode.el
-cask exec ert-runner -L . -L test -l autoscratch-mode-tests.el -f ert-run-tests-batch-and-exit "$@"
+
+cask emacs --batch -Q -L . -L test -l autoscratch-mode-tests.el -f ert-run-tests-batch-and-exit
+
 
