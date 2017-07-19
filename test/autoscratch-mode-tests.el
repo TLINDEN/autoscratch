@@ -33,10 +33,17 @@
 (require 'ert)
 
 (ert-deftest switch-text ()
+  ;; start with empty *scratch*
   (autoscratch-buffer)
+  (should (string= major-mode "autoscratch-mode"))
+  ;; should  rename  current scratch,  create  a  new scratch  in  the
+  ;; background and enable the correct mode
   (insert "t")
   (autoscratch--look-for-triggers nil)
-  (should (string= major-mode "text-mode")))
+  (should (string= major-mode "text-mode"))
+  ;; now we should be back to the previously "forked" scratch
+  (kill-buffer)
+  (should (string= major-mode "autoscratch-mode")))
 
 (provide 'trigger-tests)
 
