@@ -19,7 +19,7 @@
 ;; Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 ;; USA
 
-;; Version: 0.01
+;; Version: 0.02
 ;; Author: T.v.Dein <tlinden@cpan.org>
 ;; Keywords: files
 ;; URL: https://github.com/tlinden/autoscratch
@@ -193,8 +193,15 @@ to $mode-scratch."
 
 (defun autoscratch--eval-trigger (form)
   "If FORM is a function execute interactively, otherwise evaluate it.
-Executes `autoscratch-trigger-hook' after evaluation."
-  (eval form)
+Executes `autoscratch-trigger-hook' after evaluation.
+
+Supported values for FORM include:
+ 'emacs-lisp-mode
+ '(lambda() (emacs-lisp-mode)
+ '(emacs-lisp-mmode)"
+  (if (autoscratch--function-p form)
+      (funcall form)
+    (eval form))
   (run-hooks 'autoscratch-post-trigger-hook)
   (message (format "autoscratch switched to %s" major-mode)))
 
