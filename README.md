@@ -43,5 +43,3 @@ Autoscratch can  also be  configured to  rename the  current buffer
 after  it  switched mode  based  on  a  trigger  and create  a  new
 `autoscratch-buffer`  in the  background. In  order to  enable this
 feature, set `autoscratch-fork-after-trigger` to t.
-
-
