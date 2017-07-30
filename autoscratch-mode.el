@@ -134,13 +134,14 @@ New name is '*autoscratch-<new-major-mode><N>*
 
 Executes `autoscratch-rename-hook' afterwards."
   (interactive)
-  (rename-buffer
-   (generate-new-buffer-name
-    (format "*%s-scratch*"
-            (replace-regexp-in-string
-             "-mode" ""
-             (format "%s" major-mode))))
-   (run-hooks 'autoscratch-rename-hook)))
+  (unless (eq major-mode "autoscratch-mode")
+    (rename-buffer
+     (generate-new-buffer-name
+      (format "*%s-scratch*"
+              (replace-regexp-in-string
+               "-mode" ""
+               (format "%s" major-mode))))
+     (run-hooks 'autoscratch-rename-hook))))
 
 (defun autoscratch-buffer ()
   "Create and switch to a new autoscratch buffer."
