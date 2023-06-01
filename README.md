@@ -50,8 +50,9 @@ google)  have:  once  I  set   the  *scratch*  buffer  mode  to,  say,
 *text-mode* with some  text in there, I don't have  an elisp *scratch*
 buffer left anymore. I'd need another  one, but how to create a second
 *scratch*  buffer?  Obviously  you'll   need  to  rename  the  current
-text-mode buffer first  and then create a new empty  buffer. The emacs
-wiki contains lots of suggestions for this kind of solution.
+text-mode buffer first  and then create a new empty  buffer. The [emacs
+wiki contains lots of suggestions](https://www.emacswiki.org/emacs/RecreateScratchBuffer)
+for this kind of problem.
 
 No more  of this! Autoscratch can  just "fork" the buffer,  if enabled
 (set autoscratch-fork-after-trigger to t which is the default). Here's
