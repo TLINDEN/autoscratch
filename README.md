@@ -64,7 +64,7 @@ you waiting bravely for input.
 
 ## Installation
 
-Put `autoscratch-mode.el` into your load-path or use `package-install`
+Put `autoscratch.el` into your load-path or use `package-install`
 to install it.
 
 If you're using `use-package`, then add this:
@@ -79,7 +79,7 @@ If you're using `use-package`, then add this:
 
 The minimum configuration looks like this:
 
-        (require 'autoscratch-mode)
+        (require 'autoscratch)
         (setq initial-major-mode 'autoscratch-mode)
         (setq initial-scratch-message "")
         (setq inhibit-startup-screen t)
@@ -123,7 +123,7 @@ feature, set `autoscratch-fork-after-trigger` to t.
 
 This is my own config:
 ```lisp
-(use-package autoscratch-mode
+(use-package autoscratch
   :ensure t
   :config
   (setq initial-major-mode 'autoscratch-mode)

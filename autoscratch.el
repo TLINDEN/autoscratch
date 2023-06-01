@@ -41,7 +41,7 @@
 ;;
 ;; The minimum configuration looks like this:
 ;;
-;;     (require 'autoscratch-mode)
+;;     (require 'autoscratch)
 ;;     (setq initial-major-mode 'autoscratch-mode)
 ;;     (setq initial-scratch-message "")
 ;;     (setq inhibit-startup-screen t)
