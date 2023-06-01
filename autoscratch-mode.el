@@ -1,4 +1,4 @@
-;;; autoscratch-mode.el --- automatically switch scratch buffer mode
+;;; autoscratch-mode.el --- Automatically switch scratch buffer mode
 
 ;; Copyright (C) 2017-2018, T.v.Dein <tlinden@cpan.org>
 
@@ -112,14 +112,20 @@ such a character is # which is the comment-char in many modes."
   :type 'code)
 
 (defcustom autoscratch-fork-after-trigger t
-  "Create a new autoscratch buffer after the trigger fired.")
+  "Create a new autoscratch buffer after the trigger fired."
+  :group 'autoscratch
+  :type :boolean)
 
 (defcustom autoscratch-trigger-after 5
-  "Max chars to be entered to force trigger the default form.")
+  "Max chars to be entered to force trigger the default form."
+  :group 'autoscratch
+  :type :variable)
 
 (defcustom autoscratch-reset-default-directory nil
   "If set to true, `default-directory' will be set to `~/' in new
-  scratch buffers")
+  scratch buffers"
+  :group 'autoscratch
+  :type :boolean)
 
 ;;;; Public Vars
 
@@ -152,9 +158,7 @@ Executes `autoscratch-rename-hook' afterwards."
   (interactive)
   (let ((buf (get-buffer-create "*scratch*")))
     (switch-to-buffer buf)
-    (autoscratch-mode)
-
-    ))
+    (autoscratch-mode)))
 
 (defun autoscratch-select(modelist)
   "Interactively ask for major mode to switch to.
@@ -218,7 +222,7 @@ Supported values for FORM include:
               (dolist (trigger autoscratch-triggers-alist)
                 (when (if forward
                           (looking-at (car trigger))
-                        (looking-back (car trigger)))
+                        (looking-back (car trigger) 1))
                   (setq matchform (cdr trigger))
                   (throw 'done t))))
             (eq t autoscratch-trigger-on-first-char))
