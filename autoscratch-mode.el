@@ -1,6 +1,6 @@
 ;;; autoscratch-mode.el --- automatically switch scratch buffer mode
 
-;; Copyright (C) 2017, T.v.Dein <tlinden@cpan.org>
+;; Copyright (C) 2017-2018, T.v.Dein <tlinden@cpan.org>
 
 ;; This file is NOT part of Emacs.
 
@@ -19,7 +19,7 @@
 ;; Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 ;; USA
 
-;; Version: 0.02
+;; Version: 0.03
 ;; Author: T.v.Dein <tlinden@cpan.org>
 ;; Keywords: files
 ;; URL: https://github.com/tlinden/autoscratch
@@ -117,6 +117,10 @@ such a character is # which is the comment-char in many modes."
 (defcustom autoscratch-trigger-after 5
   "Max chars to be entered to force trigger the default form.")
 
+(defcustom autoscratch-reset-default-directory nil
+  "If set to true, `default-directory' will be set to `~/' in new
+  scratch buffers")
+
 ;;;; Public Vars
 
 (defvar autoscratch-trigger-hook ()
@@ -148,7 +152,9 @@ Executes `autoscratch-rename-hook' afterwards."
   (interactive)
   (let ((buf (get-buffer-create "*scratch*")))
     (switch-to-buffer buf)
-    (autoscratch-mode)))
+    (autoscratch-mode)
+
+    ))
 
 (defun autoscratch-select(modelist)
   "Interactively ask for major mode to switch to.
@@ -290,7 +296,11 @@ after  it switched  mode  based on  a trigger  and  create a  new
 `autoscratch-buffer' in  the background. In order  to enable this
 feature, set `autoscratch-fork-after-trigger' to t.
 
-\\{autoscratch-mode-map}")
+\\{autoscratch-mode-map}"
+
+  ;; fixes github#1
+  (if autoscratch-reset-default-directory
+      (setq default-directory "~/")))
 
 (provide 'autoscratch-mode)
 
