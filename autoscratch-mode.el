@@ -1,4 +1,4 @@
-;;; autoscratch-mode.el --- Automatically switch scratch buffer mode
+;;; autoscratch.el --- Automatically switch scratch buffer mode -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2017-2018, T.v.Dein <tlinden@cpan.org>
 
@@ -306,6 +306,6 @@ feature, set `autoscratch-fork-after-trigger' to t.
   (if autoscratch-reset-default-directory
       (setq default-directory "~/")))
 
-(provide 'autoscratch-mode)
+(provide 'autoscratch)
 
-;;; autoscratch-mode.el ends here
+;;; autoscratch.el ends here
