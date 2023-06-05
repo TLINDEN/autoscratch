@@ -1,6 +1,6 @@
 ;;; autoscratch.el --- Automatically switch scratch buffer mode -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2017-2018, T.v.Dein <tlinden@cpan.org>
+;; Copyright (C) 2017-2023, T.v.Dein <tlinden@cpan.org>
 
 ;; This file is NOT part of Emacs.
 
@@ -19,11 +19,14 @@
 ;; Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 ;; USA
 
-;; Version: 0.03
+;; Version: 0.0.4
+;; Package-Version: 20230505.800
 ;; Author: T.v.Dein <tlinden@cpan.org>
-;; Keywords: files
+;; Keywords: convenience, buffer, scrach
 ;; URL: https://github.com/tlinden/autoscratch
 ;; License: GNU General Public License >= 2
+;; Package-Requires: ((emacs "24.1"))
+;; SPDX-License-Identifier: GPL-3.0
 
 ;;; Commentary:
 ;;;; Introduction:
@@ -94,10 +97,10 @@ This list triggers after the first character entered.
 You can customize this variable directly or use `add-to-list'
 to add more triggers.
 
-In case there are more possibilities for a character, you can
-use `autoscratch-select' to make autoscratch ask interactively
-for a major mode to switch to, which see. A good example for
-such a character is # which is the comment-char in many modes."
+In case there are more possibilities for a character, you can use
+`autoscratch-select' to make autoscratch ask interactively for a
+major mode to switch to, which see.  A good example for such a
+character is # which is the comment-char in many modes."
   :group 'autoscratch
   :type 'list)
 
@@ -122,15 +125,18 @@ such a character is # which is the comment-char in many modes."
   :type :variable)
 
 (defcustom autoscratch-reset-default-directory nil
-  "If set to true, `default-directory' will be set to `~/' in new
-  scratch buffers"
+  "Reset default directory when a new scratch buffer is created.
+
+When autoscratch creates a new scratch buffer, it can reset the
+default directory to `~/' (change to home directory).  By default
+it doesn't do this."
   :group 'autoscratch
   :type :boolean)
 
 ;;;; Public Vars
 
 (defvar autoscratch-trigger-hook ()
-  "Hooks called after executing a matching trigger form")
+  "Hooks called after executing a matching trigger form.")
 
 (defvar autoscratch-rename-hook ()
   "Hooks called after renaming the current buffer.")
@@ -164,7 +170,7 @@ Executes `autoscratch-rename-hook' afterwards."
   "Interactively ask for major mode to switch to.
 
 Argument MODELIST must be an alist where the car of each
-pair must be a name and the cdr some arbitrary emacs lisp
+pair must be a name and the cdr some arbitrary Emacs Lisp
 form.
 
 Example for MODELIST:
@@ -214,9 +220,13 @@ Supported values for FORM include:
       (funcall form)
     (eval form))
   (run-hooks 'autoscratch-post-trigger-hook)
-  (message (format "autoscratch switched to %s" major-mode)))
+  (message "autoscratch switched to %s" major-mode))
 
 (defun autoscratch--look-for-triggers (forward)
+  "Check if one of the configured trigger chars has been entered.
+
+If FORWARD matchs one of the trigger chars, evaluated the the
+associated Lisp form."
   (let ((matchform nil))
     (when (or (catch 'done
               (dolist (trigger autoscratch-triggers-alist)
@@ -233,13 +243,17 @@ Supported values for FORM include:
         (autoscratch--eval-trigger autoscratch-default-trigger)))))
 
 (defun autoscratch--self-insert-command (N)
-  "Look for autoscratch trigger, execute if found and call `self-insert-command'."
+  "Look for autoscratch trigger, execute if found and call `self-insert-command'.
+
+N is the char the user just entered into the (new) scratch buffer."
   (interactive "p")
   (self-insert-command N)
   (autoscratch--look-for-triggers nil))
 
 (defun autoscratch--yank (&optional arg)
-  "Look for autoscratch trigger, execute if found and call `yank'."
+  "Look for autoscratch trigger, execute if found and call `yank'.
+
+ARG is the content of the clipboard being yanked."
   (interactive "*P")
   (let ((start (point))
         (end))
@@ -257,7 +271,7 @@ Supported values for FORM include:
     (define-key map [remap self-insert-command] 'autoscratch--self-insert-command)
     (define-key map [remap yank] 'autoscratch--yank)
     map)
-  "keymap used by autoscratch mode.")
+  "Keymap used by autoscratch mode.")
 
 ;;;; Major Mode
 
@@ -266,7 +280,7 @@ Supported values for FORM include:
   "Autoscratch major mode automatically switches major mode.
 
 This simple major mode can be  used as the initial major mode for
-the scratch  buffer. It  automatically switches to  another major
+the scratch  buffer.  It  automatically switches to  another major
 mode based on regexes triggered by text input.
 
 In   the  default   configuration  it   responds  to   the  first
@@ -285,7 +299,7 @@ The minimum configuration looks like this:
 You     may,    however,     configure    the     trigger    list
 `autoscratch-triggers-alist' according to your preferences.  This
 list consists of cons cells, where  the `car' is a regexp and the
-`cdr' an emacs  lisp form (e.g. a lambda or  defun).  If you want
+`cdr' an Emacs  Lisp form (e.g. a lambda or  defun).  If you want
 to use regexps which match more than one character, then you need
 to set  `autoscratch-trigger-on-first-char' to true  and possibly
 tune `autoscratch-trigger-after' accordingly.
@@ -297,7 +311,7 @@ course change this.
 
 Autoscratch can also  be configured to rename  the current buffer
 after  it switched  mode  based on  a trigger  and  create a  new
-`autoscratch-buffer' in  the background. In order  to enable this
+`autoscratch-buffer' in  the background.  In order  to enable this
 feature, set `autoscratch-fork-after-trigger' to t.
 
 \\{autoscratch-mode-map}"
