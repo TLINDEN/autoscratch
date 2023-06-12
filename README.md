@@ -162,3 +162,8 @@ in combination with autoscratch, here's my config for this:
              (setq persistent-scratch-scratch-buffer-p-function 'tvd-autoscratch-p))
 ```
 
+If you're  using evil  mode than,  you might  better setup  an initial
+state for autoscratch (it doesn't make much sense otherwise):
+```
+(evil-set-initial-state 'autoscratch-mode 'insert)
+```
