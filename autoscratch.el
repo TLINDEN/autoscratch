@@ -241,12 +241,12 @@ associated Lisp form."
       (when (> (point) autoscratch-trigger-after)
         (autoscratch--eval-trigger autoscratch-default-trigger)))))
 
-(defun autoscratch--self-insert-command (N)
+(defun autoscratch--self-insert-command (n)
   "Look for autoscratch trigger, execute if found and call `self-insert-command'.
 
 N is the char the user just entered into the (new) scratch buffer."
   (interactive "p")
-  (self-insert-command N)
+  (self-insert-command n)
   (autoscratch--look-for-triggers nil))
 
 (defun autoscratch--yank (&optional arg)
