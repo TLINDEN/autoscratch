@@ -97,7 +97,7 @@ exceeded,  then  the  `autoscratch-default-trigger`  form  will  be
 executed, which  by default is  `fundamental-mode`, but you  can of
 course change this.
 
-This is the default trigger list:
+### This is the default trigger list:
 
 ```lisp
 (("[(;]"         . (emacs-lisp-mode))
@@ -167,3 +167,19 @@ state for autoscratch (it doesn't make much sense otherwise):
 ```
 (evil-set-initial-state 'autoscratch-mode 'insert)
 ```
+
+## Configuration Reference
+
+| Variable                              | Setting                                                             | Default Value                  |
+|---------------------------------------|---------------------------------------------------------------------|--------------------------------|
+| `autoscratch-triggers-alist`          | List of single char commands with their triggering lisp             | see above default trigger list |
+| `autoscratch-trigger-on-first-char`   | Trigger after the first character has been entered, no matter what. | `t`                            |
+| `autoscratch-default-trigger`         | Default form to execute when nothing else matches.                  | `'(fundamental-mode)`          |
+| `autoscratch-fork-after-trigger`      | Create a new autoscratch buffer after the trigger fired.            | `t`                            |
+| `autoscratch-trigger-after`           | Max chars to be entered to force trigger the default form.          | `5`                            |
+| `autoscratch-reset-default-directory` | Reset default directory when a new scratch buffer is created.       | `nil`                          |
+
+| Hook                       | Purpose                                               |
+|----------------------------|-------------------------------------------------------|
+| `autoscratch-trigger-hook` | Hooks called after executing a matching trigger form. |
+| `autoscratch-rename-hook`  | Hooks called after renaming the current buffer.       |
