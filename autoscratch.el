@@ -214,7 +214,7 @@ Executes `autoscratch-trigger-hook' after evaluation.
 Supported values for FORM include:
  'emacs-lisp-mode
  '(lambda() (emacs-lisp-mode)
- '(emacs-lisp-mmode)"
+ '(emacs-lisp-mode)"
   (if (autoscratch--function-p form)
       (funcall form)
     (eval form))
