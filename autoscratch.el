@@ -23,7 +23,7 @@
 ;; Package-Version: 20230505.800
 ;; Author: T.v.Dein <tlinden@cpan.org>
 ;; Keywords: convenience, buffer, scrach
-;; URL: https://github.com/tlinden/autoscratch
+;; URL: https://codeberg.org/scip/autoscratch
 ;; License: GNU General Public License >= 2
 ;; Package-Requires: ((emacs "24.1"))
 ;; SPDX-License-Identifier: GPL-3.0

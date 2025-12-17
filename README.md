@@ -3,7 +3,7 @@
 # autoscratch-mode - automatically switch scratch buffer mode
 
 *Author:* T.v.Dein <tlinden AT cpan DOT org><br>
-*URL:* [https://github.com/tlinden/autoscratch](https://github.com/tlinden/autoscratch)<br>
+*URL:* [https://codeberg.org/scip/autoscratch](https://codeberg.org/scip/autoscratch)<br>
 
 ## Introduction
 

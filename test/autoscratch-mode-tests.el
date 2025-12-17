@@ -22,7 +22,7 @@
 ;; Version: 0.01
 ;; Author: T.v.Dein <tlinden@cpan.org>
 ;; Keywords: files
-;; URL: https://github.com/tlinden/autoscratch
+;; URL: https://codeberg.org/scip/autoscratch
 ;; License: GNU General Public License >= 2
 
 ;;; Commentary:
