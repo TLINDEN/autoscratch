@@ -1,5 +1,3 @@
-[![Build Status](https://travis-ci.org/TLINDEN/autoscratch.svg?branch=master)](https://travis-ci.org/TLINDEN/autoscratch)
-
 # autoscratch-mode - automatically switch scratch buffer mode
 
 *Author:* T.v.Dein <tlinden AT cpan DOT org><br>
