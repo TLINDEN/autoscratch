@@ -1,3 +1,7 @@
+> [!CAUTION]
+> This software is now being maintained on [Codeberg](https://codeberg.org/scip/autoscratch/).
+
+
 # autoscratch-mode - automatically switch scratch buffer mode
 
 *Author:* T.v.Dein <tlinden AT cpan DOT org><br>
